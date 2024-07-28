@@ -1,39 +1,35 @@
-<script src='https://d3js.org/d3.v5.min.js'></script>
-<style> circle {fill: lightblue; stroke: black;} </style>
-<body onload='init()'>
-<svg width=300 height=300>
-</svg>
-<script>
-async function init() {
+<!DOCTYPE html>
 
-const data = await d3.csv("https://flunky.github.io/cars2017.csv");
-const width = 200;
-const height = 200;
-const margin = 50;
-
-var x = d3.scaleLog().domain([10, 150]).range([0, width]);
-
-var y = d3.scaleLog().domain([10, 150]).range([height, 0]);
-
-svg = d3.select("svg");
-
-svg.attr("width", width+2*margin).attr("height", height+2*margin).append("g").attr("transform", "translate("+margin+","+margin+")")
- .selectAll("circle").data(data).enter().append("circle")
-.attr("cx", function(d){ return x(d.AverageCityMPG)})
-.attr("cy", function(d){return y(d.AverageHighwayMPG)}).attr("r", function(d) {return (2+ parseFloat(d.EngineCylinders))});
-
-
-xAxis = d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s"));
-
-yAxis = d3.axisLeft(y).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s"));
-
-svg.append("g").attr("transform","translate("+margin+","+margin+")").call(yAxis);
-
-svg.append("g").attr("transform","translate("+margin+","+(height+margin)+")").call(xAxis);
-
-}
-</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Health and Life Expectancy</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3-annotation.susielu.com/v2/d3-annotation.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        svg {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Global Health and Life Expectancy</h1>
+        <div id="visualization"></div>
+    </div>
 </body>
+</html>
+
 
 
 
