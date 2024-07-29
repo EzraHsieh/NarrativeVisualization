@@ -10,8 +10,7 @@ async function init() {
             d3.select(scenes[currentScene]).classed('active', false);
             currentScene++;
             d3.select(scenes[currentScene]).classed('active', true);
-            if (currentScene === 1) createRegionChart(regionData);
-            if (currentScene === 2) createCountryChart(countryData);
+            updateChartForScene(currentScene);
         }
     });
 
@@ -20,8 +19,7 @@ async function init() {
             d3.select(scenes[currentScene]).classed('active', false);
             currentScene--;
             d3.select(scenes[currentScene]).classed('active', true);
-            if (currentScene === 0) createLineChart(globalData);
-            if (currentScene === 1) createRegionChart(regionData);
+            updateChartForScene(currentScene);
         }
     });
 
@@ -59,8 +57,13 @@ async function init() {
 
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const x = d3.scaleTime().domain(d3.extent(data, d => new Date(d.Year, 0, 1))).range([0, width]);
-        const y = d3.scaleLinear().domain([d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)]).range([height, 0]);
+        const x = d3.scaleTime()
+            .domain(d3.extent(data, d => new Date(d.Year, 0, 1)))
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)])
+            .range([height, 0]);
 
         const line = d3.line()
             .x(d => x(new Date(d.Year, 0, 1)))
@@ -68,7 +71,7 @@ async function init() {
 
         g.append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")));
 
         g.append("g")
             .call(d3.axisLeft(y));
@@ -130,8 +133,13 @@ async function init() {
 
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const x = d3.scaleTime().domain(d3.extent(data, d => new Date(d.Year, 0, 1))).range([0, width]);
-        const y = d3.scaleLinear().domain([d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)]).range([height, 0]);
+        const x = d3.scaleTime()
+            .domain(d3.extent(data, d => new Date(d.Year, 0, 1)))
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)])
+            .range([height, 0]);
 
         const line = d3.line()
             .x(d => x(new Date(d.Year, 0, 1)))
@@ -139,7 +147,7 @@ async function init() {
 
         g.append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")));
 
         g.append("g")
             .call(d3.axisLeft(y));
@@ -161,4 +169,17 @@ async function init() {
             .append("title")
             .text(d => `Year: ${d.Year}\nLife Expectancy: ${d.LifeExpectancy}`);
     }
+
+    function updateChartForScene(sceneIndex) {
+        if (sceneIndex === 0) {
+            createLineChart(globalData);
+        } else if (sceneIndex === 1) {
+            createRegionChart(regionData);
+        } else if (sceneIndex === 2) {
+            createCountryChart(countryData);
+        }
+    }
+
+    // Initial display
+    d3.select(scenes[currentScene]).classed('active', true);
 }
