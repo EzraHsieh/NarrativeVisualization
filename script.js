@@ -100,6 +100,28 @@ async function init() {
             .attr("stroke", "steelblue")
             .attr("stroke-width", 1.5)
             .attr("d", line);
+
+        // Annotation for COVID-19
+        const annotations = [
+            {
+                note: {
+                    label: "COVID-19 Pandemic Began",
+                    align: "middle"
+                },
+                x: x(new Date(2019, 0, 1)),
+                y: y(d3.mean(data.filter(d => d.Year === 2019), d => d.LifeExpectancy)),
+                dy: -40,
+                dx: 20
+            }
+        ];
+
+        const makeAnnotations = d3.annotation()
+            .type(d3.annotationLabel)
+            .annotations(annotations);
+
+        g.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations);
     }
 
     function createRegionChart(data) {
@@ -191,35 +213,22 @@ async function init() {
             .attr("class", "dot")
             .attr("cx", d => x(new Date(d.Year, 0, 1)))
             .attr("cy", d => y(d.LifeExpectancy))
-            .attr("r", 5)
-            .append("title")
-            .text(d => `Year: ${d.Year}\nLife Expectancy: ${d.LifeExpectancy}`);
-    }
-
-    function updateCountryChart(country) {
-        console.log(`Updating country chart for ${country}...`); // Debugging
-        // Filter data for the selected country
-        const filteredData = countryData.filter(d => d.Country === country);
-        createCountryChart(filteredData);
+            .attr("r", 3)
+            .attr("fill", "steelblue");
     }
 
     function updateChartForScene(sceneIndex) {
-        console.log(`Updating chart for scene ${sceneIndex}...`); // Debugging
         if (sceneIndex === 0) {
             createLineChart(globalData);
         } else if (sceneIndex === 1) {
             createRegionChart(regionData);
         } else if (sceneIndex === 2) {
-            // Populate the dropdown menu and show country chart
-            const selectedCountry = d3.select("#country-select").property("value");
-            if (selectedCountry) {
-                updateCountryChart(selectedCountry);
-            } else {
-                createCountryChart(countryData); // Default to showing all countries
-            }
+            createCountryChart(countryData);
         }
     }
 
-    // Initial scene setup
-    d3.select(scenes[currentScene]).classed('active', true);
+    function updateCountryChart(selectedCountry) {
+        const filteredData = countryData.filter(d => d.Country === selectedCountry);
+        createCountryChart(filteredData);
+    }
 }
