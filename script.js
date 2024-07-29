@@ -121,12 +121,12 @@ async function init() {
                     note: {
                         label: "COVID-19 Pandemic Began",
                         align: "middle",
-                        wrap: 150
+                        wrap: 200
                     },
                     x: covidAnnotationX,
                     y: covidAnnotationY,
                     dy: 60, // Adjust this to ensure the annotation is within the chart
-                    dx: -20   // Adjust this to ensure the annotation is within the chart
+                    dx: -30   // Adjust this to ensure the annotation is within the chart
                 }
             ];
 
@@ -151,7 +151,7 @@ async function init() {
             .attr("width", 800)
             .attr("height", 600);
 
-        const margin = { top: 20, right: 30, bottom: 60, left: 50 };
+        const margin = { top: 20, right: 30, bottom: 100, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -244,12 +244,12 @@ async function init() {
                     note: {
                         label: "COVID-19 Pandemic Began",
                         align: "middle",
-                        wrap: 150
+                        wrap: 200
                     },
                     x: covidAnnotationX,
                     y: covidAnnotationY,
                     dy: 60,  // Adjusted to ensure the annotation is within the chart
-                    dx: -20  // Adjusted to ensure the annotation is within the chart
+                    dx: -30  // Adjusted to ensure the annotation is within the chart
                 }
             ];
     
@@ -266,13 +266,15 @@ async function init() {
     }
     
 
+    let defaultCountry = "World"; // Default country for third scene
+
     function updateChartForScene(sceneIndex) {
         if (sceneIndex === 0) {
             createLineChart(globalData);
         } else if (sceneIndex === 1) {
             createRegionChart(regionData);
         } else if (sceneIndex === 2) {
-            createCountryChart(countryData);
+            updateCountryChart(defaultCountry); // Set default country
         }
     }
 
@@ -280,4 +282,5 @@ async function init() {
         const filteredData = countryData.filter(d => d.Country === selectedCountry);
         createCountryChart(filteredData);
     }
+
 }
