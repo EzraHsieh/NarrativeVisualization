@@ -21,6 +21,11 @@ async function init() {
         LifeExpectancy: +d.LifeExpectancy
     }));
 
+    // Log data to verify
+    console.log("Global Data:", globalData);
+    console.log("Region Data:", regionData);
+    console.log("Country Data:", countryData);
+
     // Initial chart rendering
     updateChartForScene(currentScene);
 
@@ -102,31 +107,36 @@ async function init() {
             .attr("d", line);
 
         // Annotation for COVID-19
-        const covidAnnotationX = x(new Date(2019, 0, 1));
-        const covidAnnotationY = y(d3.mean(data.filter(d => d.Year === 2019), d => d.LifeExpectancy));
-        console.log(`COVID Annotation - X: ${covidAnnotationX}, Y: ${covidAnnotationY}`); // Debugging
+        const covidAnnotationData = data.find(d => d.Year === 2019);
+        if (covidAnnotationData) {
+            const covidAnnotationX = x(new Date(2019, 0, 1));
+            const covidAnnotationY = y(covidAnnotationData.LifeExpectancy);
+            console.log(`COVID Annotation - X: ${covidAnnotationX}, Y: ${covidAnnotationY}`); // Debugging
 
-        const annotations = [
-            {
-                note: {
-                    label: "COVID-19 Pandemic Began",
-                    align: "middle",
-                    wrap: 150
-                },
-                x: covidAnnotationX,
-                y: covidAnnotationY,
-                dy: 30, // Adjust this to ensure the annotation is within the chart
-                dx: 10   // Adjust this to ensure the annotation is within the chart
-            }
-        ];
+            const annotations = [
+                {
+                    note: {
+                        label: "COVID-19 Pandemic Began",
+                        align: "middle",
+                        wrap: 150
+                    },
+                    x: covidAnnotationX,
+                    y: covidAnnotationY,
+                    dy: -30, // Adjust this to ensure the annotation is within the chart
+                    dx: 10   // Adjust this to ensure the annotation is within the chart
+                }
+            ];
 
-        const makeAnnotations = d3.annotation()
-            .type(d3.annotationLabel)
-            .annotations(annotations);
+            const makeAnnotations = d3.annotation()
+                .type(d3.annotationLabel)
+                .annotations(annotations);
 
-        g.append("g")
-            .attr("class", "annotation-group")
-            .call(makeAnnotations);
+            g.append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations);
+        } else {
+            console.warn("No data found for 2019 to annotate.");
+        }
     }
 
     function createRegionChart(data) {
