@@ -115,7 +115,7 @@ async function init() {
                 },
                 x: covidAnnotationX,
                 y: covidAnnotationY,
-                dy: -30, // Adjust this to ensure the annotation is within the chart
+                dy: 30, // Adjust this to ensure the annotation is within the chart
                 dx: 10   // Adjust this to ensure the annotation is within the chart
             }
         ];
