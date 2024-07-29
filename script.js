@@ -108,6 +108,7 @@ async function init() {
 
         // Annotation for COVID-19
         const covidAnnotationData = data.find(d => d.Year === 2019);
+
         if (covidAnnotationData) {
             const covidAnnotationX = x(new Date(2019, 0, 1));
             const covidAnnotationY = y(covidAnnotationData.LifeExpectancy);
@@ -122,7 +123,7 @@ async function init() {
                     },
                     x: covidAnnotationX,
                     y: covidAnnotationY,
-                    dy: -30, // Adjust this to ensure the annotation is within the chart
+                    dy: -200, // Adjust this to ensure the annotation is within the chart
                     dx: 10   // Adjust this to ensure the annotation is within the chart
                 }
             ];
