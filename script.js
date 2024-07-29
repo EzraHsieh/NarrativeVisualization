@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', init);
 
+console.log("12:42 update.");
+
 async function init() {
     const scenes = ['#scene-1', '#scene-2', '#scene-3'];
     let currentScene = 0;
@@ -127,7 +129,6 @@ async function init() {
                     dx: -20   // Adjust this to ensure the annotation is within the chart
                 }
             ];
-            console.log(`dy is: 100`);
 
             const makeAnnotations = d3.annotation()
                 .type(d3.annotationLabel)
@@ -182,57 +183,88 @@ async function init() {
 
     function createCountryChart(data) {
         console.log("Creating country chart..."); // Debugging
+    
         // Clear existing SVG content
         d3.select("#country-chart").selectAll("*").remove();
-
+    
         const svg = d3.select("#country-chart").append("svg")
             .attr("width", 800)
             .attr("height", 600);
-
+    
         const margin = { top: 20, right: 30, bottom: 60, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
-
+    
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
-
+    
+        const xDomain = d3.extent(data, d => new Date(d.Year, 0, 1));
+        const yDomain = [d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)];
+    
+        console.log("X Domain:", xDomain); // Debugging
+        console.log("Y Domain:", yDomain); // Debugging
+    
         const x = d3.scaleTime()
-            .domain(d3.extent(data, d => new Date(d.Year, 0, 1)))
+            .domain(xDomain)
             .range([0, width]);
-
+    
         const y = d3.scaleLinear()
-            .domain([d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)])
+            .domain(yDomain)
             .range([height, 0]);
-
+    
         const line = d3.line()
             .x(d => x(new Date(d.Year, 0, 1)))
             .y(d => y(d.LifeExpectancy));
-
+    
         g.append("g")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).tickSize(0))
             .selectAll("text")
             .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
-
+    
         g.append("g")
             .call(d3.axisLeft(y));
-
+    
         g.append("path")
             .datum(data)
             .attr("fill", "none")
             .attr("stroke", "steelblue")
             .attr("stroke-width", 1.5)
             .attr("d", line);
-
-        g.selectAll(".dot")
-            .data(data)
-            .enter().append("circle")
-            .attr("class", "dot")
-            .attr("cx", d => x(new Date(d.Year, 0, 1)))
-            .attr("cy", d => y(d.LifeExpectancy))
-            .attr("r", 3)
-            .attr("fill", "steelblue");
+    
+        // Annotation for COVID-19
+        const covidAnnotationData = data.find(d => d.Year === 2019);
+        if (covidAnnotationData) {
+            const covidAnnotationX = x(new Date(2019, 0, 1));
+            const covidAnnotationY = y(covidAnnotationData.LifeExpectancy);
+            console.log(`COVID Annotation - X: ${covidAnnotationX}, Y: ${covidAnnotationY}`); // Debugging
+    
+            const annotations = [
+                {
+                    note: {
+                        label: "COVID-19 Pandemic Began",
+                        align: "middle",
+                        wrap: 150
+                    },
+                    x: covidAnnotationX,
+                    y: covidAnnotationY,
+                    dy: 60,  // Adjusted to ensure the annotation is within the chart
+                    dx: -20  // Adjusted to ensure the annotation is within the chart
+                }
+            ];
+    
+            const makeAnnotations = d3.annotation()
+                .type(d3.annotationLabel)
+                .annotations(annotations);
+    
+            g.append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations);
+        } else {
+            console.warn("No data found for 2019 to annotate.");
+        }
     }
+    
 
     function updateChartForScene(sceneIndex) {
         if (sceneIndex === 0) {
