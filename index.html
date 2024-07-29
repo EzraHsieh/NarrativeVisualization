@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.min.js"></script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Health and Life Expectancy</title>
@@ -31,7 +28,7 @@
 <body>
     <h1>Global Health and Life Expectancy</h1>
     
-    <div id="scene-1" class="scene">
+    <div id="scene-1" class="scene active">
         <h2>Scene 1: Global Life Expectancy Over Time</h2>
         <p>This visualization shows the global trend of life expectancy over time. As you can see, life expectancy has generally been increasing, with a slight drop following the COVID-19 pandemic.</p>
         <div id="line-chart"></div>
@@ -56,7 +53,9 @@
         <button id="previous">Previous</button>
         <button id="next">Next</button>
     </div>
-    
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

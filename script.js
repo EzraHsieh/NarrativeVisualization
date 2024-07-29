@@ -22,7 +22,7 @@ async function init() {
     }));
 
     // Initial chart rendering
-    createLineChart(globalData);
+    updateChartForScene(currentScene);
 
     // Populate the dropdown menu with country options
     const countries = Array.from(new Set(countryData.map(d => d.Country)));
