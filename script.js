@@ -21,7 +21,7 @@ async function init() {
         LifeExpectancy: +d.LifeExpectancy
     }));
 
-    // Create the initial chart (first scene)
+    // Initial chart rendering
     createLineChart(globalData);
 
     // Add event listeners to buttons
@@ -44,6 +44,7 @@ async function init() {
     });
 
     function createLineChart(data) {
+        console.log("Creating line chart..."); // Debugging
         // Clear existing SVG content
         d3.select("#line-chart").selectAll("*").remove();
 
@@ -51,7 +52,7 @@ async function init() {
             .attr("width", 800)
             .attr("height", 600);
 
-        const margin = { top: 20, right: 30, bottom: 60, left: 50 }; // Increased bottom margin for label space
+        const margin = { top: 20, right: 30, bottom: 60, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -71,9 +72,9 @@ async function init() {
 
         g.append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).tickSize(0)) // Adjust tick size
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).tickSize(0))
             .selectAll("text")
-            .attr("transform", "rotate(-45)") // Rotate labels to prevent overlap
+            .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
 
         g.append("g")
@@ -88,6 +89,7 @@ async function init() {
     }
 
     function createRegionChart(data) {
+        console.log("Creating region chart..."); // Debugging
         // Clear existing SVG content
         d3.select("#region-chart").selectAll("*").remove();
 
@@ -95,7 +97,7 @@ async function init() {
             .attr("width", 800)
             .attr("height", 600);
 
-        const margin = { top: 20, right: 30, bottom: 60, left: 50 }; // Increased bottom margin for label space
+        const margin = { top: 20, right: 30, bottom: 60, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -108,7 +110,7 @@ async function init() {
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x))
             .selectAll("text")
-            .attr("transform", "rotate(-45)") // Rotate labels to prevent overlap
+            .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
 
         g.append("g")
@@ -126,6 +128,7 @@ async function init() {
     }
 
     function createCountryChart(data) {
+        console.log("Creating country chart..."); // Debugging
         // Clear existing SVG content
         d3.select("#country-chart").selectAll("*").remove();
 
@@ -133,7 +136,7 @@ async function init() {
             .attr("width", 800)
             .attr("height", 600);
 
-        const margin = { top: 20, right: 30, bottom: 60, left: 50 }; // Increased bottom margin for label space
+        const margin = { top: 20, right: 30, bottom: 60, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -153,9 +156,9 @@ async function init() {
 
         g.append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).tickSize(0)) // Adjust tick size
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).tickSize(0))
             .selectAll("text")
-            .attr("transform", "rotate(-45)") // Rotate labels to prevent overlap
+            .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
 
         g.append("g")
@@ -180,6 +183,7 @@ async function init() {
     }
 
     function updateChartForScene(sceneIndex) {
+        console.log(`Updating chart for scene ${sceneIndex}...`); // Debugging
         if (sceneIndex === 0) {
             createLineChart(globalData);
         } else if (sceneIndex === 1) {
@@ -189,6 +193,6 @@ async function init() {
         }
     }
 
-    // Ensure the correct scene is displayed
+    // Initial scene setup
     d3.select(scenes[currentScene]).classed('active', true);
 }
