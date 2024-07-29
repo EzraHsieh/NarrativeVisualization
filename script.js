@@ -24,6 +24,15 @@ async function init() {
     // Initial chart rendering
     createLineChart(globalData);
 
+    // Populate the dropdown menu with country options
+    const countries = Array.from(new Set(countryData.map(d => d.Country)));
+    const countrySelect = d3.select("#country-select");
+    countrySelect.selectAll("option")
+        .data(countries)
+        .enter().append("option")
+        .attr("value", d => d)
+        .text(d => d);
+
     // Add event listeners to buttons
     document.getElementById('next').addEventListener('click', () => {
         if (currentScene < scenes.length - 1) {
@@ -41,6 +50,11 @@ async function init() {
             d3.select(scenes[currentScene]).classed('active', true);
             updateChartForScene(currentScene);
         }
+    });
+
+    d3.select("#country-select").on("change", function() {
+        const selectedCountry = d3.select(this).property("value");
+        updateCountryChart(selectedCountry);
     });
 
     function createLineChart(data) {
@@ -182,6 +196,13 @@ async function init() {
             .text(d => `Year: ${d.Year}\nLife Expectancy: ${d.LifeExpectancy}`);
     }
 
+    function updateCountryChart(country) {
+        console.log(`Updating country chart for ${country}...`); // Debugging
+        // Filter data for the selected country
+        const filteredData = countryData.filter(d => d.Country === country);
+        createCountryChart(filteredData);
+    }
+
     function updateChartForScene(sceneIndex) {
         console.log(`Updating chart for scene ${sceneIndex}...`); // Debugging
         if (sceneIndex === 0) {
@@ -189,7 +210,13 @@ async function init() {
         } else if (sceneIndex === 1) {
             createRegionChart(regionData);
         } else if (sceneIndex === 2) {
-            createCountryChart(countryData);
+            // Populate the dropdown menu and show country chart
+            const selectedCountry = d3.select("#country-select").property("value");
+            if (selectedCountry) {
+                updateCountryChart(selectedCountry);
+            } else {
+                createCountryChart(countryData); // Default to showing all countries
+            }
         }
     }
 
