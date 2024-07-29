@@ -10,7 +10,17 @@ async function init() {
             currentScene++;
             d3.select(scenes[currentScene]).classed('active', true);
             if (currentScene === 1) createRegionChart(regionData);
-            // if (currentScene === 2) createCountryChart(countryData);
+            if (currentScene === 2) createCountryChart(countryData);
+        }
+    });
+
+    document.getElementById('previous').addEventListener('click', () => {
+        if (currentScene > 0) {
+            d3.select(scenes[currentScene]).classed('active', false);
+            currentScene--;
+            d3.select(scenes[currentScene]).classed('active', true);
+            if (currentScene === 0) createLineChart(globalData);
+            if (currentScene === 1) createRegionChart(regionData);
         }
     });
 
@@ -23,9 +33,9 @@ async function init() {
         return { Region: d.Region, LifeExpectancy: +d.LifeExpectancy };
     });
 
-    // const countryData = await d3.csv("country_life_expectancy.csv", d => {
-    //     return { Country: d.Country, Year: +d.Year, LifeExpectancy: +d.LifeExpectancy };
-    // });
+    const countryData = await d3.csv("country_life_expectancy.csv", d => {
+        return { Country: d.Country, Year: +d.Year, LifeExpectancy: +d.LifeExpectancy };
+    });
 
     // Create the first scene (line chart)
     createLineChart(globalData);
@@ -40,11 +50,11 @@ async function init() {
 
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const x = d3.scaleTime().domain(d3.extent(data, d => d.Year)).range([0, width]);
+        const x = d3.scaleTime().domain(d3.extent(data, d => new Date(d.Year, 0, 1))).range([0, width]);
         const y = d3.scaleLinear().domain([d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)]).range([height, 0]);
 
         const line = d3.line()
-            .x(d => x(d.Year))
+            .x(d => x(new Date(d.Year, 0, 1)))
             .y(d => y(d.LifeExpectancy));
 
         g.append("g")
@@ -103,11 +113,11 @@ async function init() {
 
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const x = d3.scaleTime().domain(d3.extent(data, d => d.Year)).range([0, width]);
+        const x = d3.scaleTime().domain(d3.extent(data, d => new Date(d.Year, 0, 1))).range([0, width]);
         const y = d3.scaleLinear().domain([d3.min(data, d => d.LifeExpectancy), d3.max(data, d => d.LifeExpectancy)]).range([height, 0]);
 
         const line = d3.line()
-            .x(d => x(d.Year))
+            .x(d => x(new Date(d.Year, 0, 1)))
             .y(d => y(d.LifeExpectancy));
 
         g.append("g")
@@ -128,7 +138,7 @@ async function init() {
             .data(data)
             .enter().append("circle")
             .attr("class", "dot")
-            .attr("cx", d => x(d.Year))
+            .attr("cx", d => x(new Date(d.Year, 0, 1)))
             .attr("cy", d => y(d.LifeExpectancy))
             .attr("r", 5)
             .append("title")

@@ -24,6 +24,11 @@
         .active {
             display: block;
         }
+        .description {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -31,6 +36,12 @@
         <h1>Global Health and Life Expectancy</h1>
         <div id="scene-1" class="scene active">
             <h2>Global Life Expectancy Over Time</h2>
+            <div class="description">
+                The chart below shows the global life expectancy over time. 
+                As we can see, there has been a steady increase in life expectancy 
+                over the years. However, there was a noticeable dip in the trend around 
+                the year 2020, which reflects the impact of the COVID-19 pandemic on global health.
+            </div>
             <div id="line-chart"></div>
         </div>
         <div id="scene-2" class="scene">
@@ -41,6 +52,7 @@
             <h2>Explore Data by Country</h2>
             <div id="country-chart"></div>
         </div>
+        <button id="previous">Previous</button>
         <button id="next">Next</button>
     </div>
     <script src="script.js"></script>
