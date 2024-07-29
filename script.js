@@ -4,6 +4,26 @@ async function init() {
     const scenes = ['#scene-1', '#scene-2', '#scene-3'];
     let currentScene = 0;
 
+    // Load data
+    const globalData = await d3.csv("global_life_expectancy.csv", d => ({
+        Year: +d.Year,
+        LifeExpectancy: +d.LifeExpectancy
+    }));
+
+    const regionData = await d3.csv("region_life_expectancy.csv", d => ({
+        Region: d.Region,
+        LifeExpectancy: +d.LifeExpectancy
+    }));
+
+    const countryData = await d3.csv("country_life_expectancy.csv", d => ({
+        Country: d.Country,
+        Year: +d.Year,
+        LifeExpectancy: +d.LifeExpectancy
+    }));
+
+    // Create the initial chart (first scene)
+    createLineChart(globalData);
+
     // Add event listeners to buttons
     document.getElementById('next').addEventListener('click', () => {
         if (currentScene < scenes.length - 1) {
@@ -23,26 +43,6 @@ async function init() {
         }
     });
 
-    // Load data
-    const globalData = await d3.csv("global_life_expectancy.csv", d => ({
-        Year: +d.Year,
-        LifeExpectancy: +d.LifeExpectancy
-    }));
-
-    const regionData = await d3.csv("region_life_expectancy.csv", d => ({
-        Region: d.Region,
-        LifeExpectancy: +d.LifeExpectancy
-    }));
-
-    const countryData = await d3.csv("country_life_expectancy.csv", d => ({
-        Country: d.Country,
-        Year: +d.Year,
-        LifeExpectancy: +d.LifeExpectancy
-    }));
-
-    // Create the first scene (line chart)
-    createLineChart(globalData);
-
     function createLineChart(data) {
         // Clear existing SVG content
         d3.select("#line-chart").selectAll("*").remove();
@@ -51,7 +51,7 @@ async function init() {
             .attr("width", 800)
             .attr("height", 600);
 
-        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+        const margin = { top: 20, right: 30, bottom: 60, left: 50 }; // Increased bottom margin for label space
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -71,7 +71,10 @@ async function init() {
 
         g.append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")));
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).tickSize(0)) // Adjust tick size
+            .selectAll("text")
+            .attr("transform", "rotate(-45)") // Rotate labels to prevent overlap
+            .style("text-anchor", "end");
 
         g.append("g")
             .call(d3.axisLeft(y));
@@ -92,7 +95,7 @@ async function init() {
             .attr("width", 800)
             .attr("height", 600);
 
-        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+        const margin = { top: 20, right: 30, bottom: 60, left: 50 }; // Increased bottom margin for label space
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -103,7 +106,10 @@ async function init() {
 
         g.append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+            .attr("transform", "rotate(-45)") // Rotate labels to prevent overlap
+            .style("text-anchor", "end");
 
         g.append("g")
             .call(d3.axisLeft(y));
@@ -127,7 +133,7 @@ async function init() {
             .attr("width", 800)
             .attr("height", 600);
 
-        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+        const margin = { top: 20, right: 30, bottom: 60, left: 50 }; // Increased bottom margin for label space
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -147,7 +153,10 @@ async function init() {
 
         g.append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")));
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).tickSize(0)) // Adjust tick size
+            .selectAll("text")
+            .attr("transform", "rotate(-45)") // Rotate labels to prevent overlap
+            .style("text-anchor", "end");
 
         g.append("g")
             .call(d3.axisLeft(y));
@@ -180,6 +189,6 @@ async function init() {
         }
     }
 
-    // Initial display
+    // Ensure the correct scene is displayed
     d3.select(scenes[currentScene]).classed('active', true);
 }
