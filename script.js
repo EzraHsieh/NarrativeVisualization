@@ -4,6 +4,7 @@ async function init() {
     const scenes = ['#scene-1', '#scene-2', '#scene-3'];
     let currentScene = 0;
 
+    // Add event listeners to buttons
     document.getElementById('next').addEventListener('click', () => {
         if (currentScene < scenes.length - 1) {
             d3.select(scenes[currentScene]).classed('active', false);
@@ -25,25 +26,33 @@ async function init() {
     });
 
     // Load data
-    const globalData = await d3.csv("global_life_expectancy.csv", d => {
-        return { Year: +d.Year, LifeExpectancy: +d.LifeExpectancy };
-    });
+    const globalData = await d3.csv("global_life_expectancy.csv", d => ({
+        Year: +d.Year,
+        LifeExpectancy: +d.LifeExpectancy
+    }));
 
-    const regionData = await d3.csv("region_life_expectancy.csv", d => {
-        return { Region: d.Region, LifeExpectancy: +d.LifeExpectancy };
-    });
+    const regionData = await d3.csv("region_life_expectancy.csv", d => ({
+        Region: d.Region,
+        LifeExpectancy: +d.LifeExpectancy
+    }));
 
-    const countryData = await d3.csv("country_life_expectancy.csv", d => {
-        return { Country: d.Country, Year: +d.Year, LifeExpectancy: +d.LifeExpectancy };
-    });
+    const countryData = await d3.csv("country_life_expectancy.csv", d => ({
+        Country: d.Country,
+        Year: +d.Year,
+        LifeExpectancy: +d.LifeExpectancy
+    }));
 
     // Create the first scene (line chart)
     createLineChart(globalData);
 
     function createLineChart(data) {
+        // Clear existing SVG content
+        d3.select("#line-chart").selectAll("*").remove();
+
         const svg = d3.select("#line-chart").append("svg")
             .attr("width", 800)
             .attr("height", 600);
+
         const margin = { top: 20, right: 30, bottom: 40, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
@@ -73,9 +82,13 @@ async function init() {
     }
 
     function createRegionChart(data) {
+        // Clear existing SVG content
+        d3.select("#region-chart").selectAll("*").remove();
+
         const svg = d3.select("#region-chart").append("svg")
             .attr("width", 800)
             .attr("height", 600);
+
         const margin = { top: 20, right: 30, bottom: 40, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
@@ -104,9 +117,13 @@ async function init() {
     }
 
     function createCountryChart(data) {
+        // Clear existing SVG content
+        d3.select("#country-chart").selectAll("*").remove();
+
         const svg = d3.select("#country-chart").append("svg")
             .attr("width", 800)
             .attr("height", 600);
+
         const margin = { top: 20, right: 30, bottom: 40, left: 50 };
         const width = +svg.attr("width") - margin.left - margin.right;
         const height = +svg.attr("height") - margin.top - margin.bottom;
