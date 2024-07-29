@@ -102,16 +102,21 @@ async function init() {
             .attr("d", line);
 
         // Annotation for COVID-19
+        const covidAnnotationX = x(new Date(2019, 0, 1));
+        const covidAnnotationY = y(d3.mean(data.filter(d => d.Year === 2019), d => d.LifeExpectancy));
+        console.log(`COVID Annotation - X: ${covidAnnotationX}, Y: ${covidAnnotationY}`); // Debugging
+
         const annotations = [
             {
                 note: {
                     label: "COVID-19 Pandemic Began",
-                    align: "middle"
+                    align: "middle",
+                    wrap: 150
                 },
-                x: x(new Date(2019, 0, 1)),
-                y: y(d3.mean(data.filter(d => d.Year === 2019), d => d.LifeExpectancy)),
-                dy: -40,
-                dx: 20
+                x: covidAnnotationX,
+                y: covidAnnotationY,
+                dy: -30, // Adjust this to ensure the annotation is within the chart
+                dx: 10   // Adjust this to ensure the annotation is within the chart
             }
         ];
 
