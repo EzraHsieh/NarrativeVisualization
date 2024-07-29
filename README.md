@@ -1,6 +1,6 @@
 # COVID-19 and Life Expectancy
 
-This project, "COVID-19 and Life Expectancy," is an interactive narrative visualization designed to illustrate the impact of the COVID-19 pandemic on global life expectancy. The visualization is implemented using D3.js and follows the Martini glass narrative structure to guide the audience through a focused story before allowing them to explore the data further.
+This project, ["COVID-19 and Life Expectancy,"](https://ezrahsieh.github.io/NarrativeVisualization/) is an interactive narrative visualization designed to illustrate the impact of the COVID-19 pandemic on global life expectancy. The visualization is implemented using D3.js and follows the Martini glass narrative structure to guide the audience through a focused story before allowing them to explore the data further.
 
 ## Overview
 
