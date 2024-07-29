@@ -127,6 +127,7 @@ async function init() {
                     dx: 10   // Adjust this to ensure the annotation is within the chart
                 }
             ];
+            console.log(`dy is: -200`);
 
             const makeAnnotations = d3.annotation()
                 .type(d3.annotationLabel)
