@@ -123,8 +123,8 @@ async function init() {
                     },
                     x: covidAnnotationX,
                     y: covidAnnotationY,
-                    dy: 100, // Adjust this to ensure the annotation is within the chart
-                    dx: 10   // Adjust this to ensure the annotation is within the chart
+                    dy: 60, // Adjust this to ensure the annotation is within the chart
+                    dx: -20   // Adjust this to ensure the annotation is within the chart
                 }
             ];
             console.log(`dy is: 100`);
